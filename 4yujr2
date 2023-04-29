@@ -1,0 +1,333 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Diagnostics;
+
+
+namespace HyperElk.Core
+{
+
+    public class ClassicHunter : CombatRoutine
+    {
+		// Shadow Buffs
+		private string AutoShot = "Auto Shot", RaptorStrike = "Raptor Strike", SerpentSting = "Serpent Sting", ArcaneShot = "Arcane Shot", HuntersMark = "Hunter's Mark", 
+		ConcussiveShot = "Concussive Shot", WingClip = "Wing Clip", PetAttack = "Pet Attack", ScareBeast = "Scare Beast", DismissPet = "Dismiss Pet", MendPet = "Mend Pet", 
+		RevivePet = "Revive Pet", MongooseBite = "Mongoose Bite", MultiShot = "Multi-Shot", FreezingTrap = "Freezing Trap", AspectOfTheHawk = "Aspect of the Hawk", 
+		AspectOfTheCheetah = "Aspect of the Cheetah", Disengage = "Disengage", AspectOfTheMonkey = "Aspect of the Monkey", FeignDeath = "Feign Death",
+		Shadowmeld = "Shadowmeld", ScorpidSting = "Scorpid Sting", Intimidation = "Intimidation", ViperSting = "Viper Sting", PetGrowl = "Growl", BestialWrath = "Bestial Wrath", RapidFire = "Rapid Fire";
+		
+		private string HMark = "Mark", Kite = "Kite", NoSting = "No Sting";
+		
+		public class Unit
+			{
+				public string Id { get; set; }
+
+				public bool TargetingPlayer
+				{
+					get { return API.PlayerIsUnitTarget(Id); }
+				}
+
+				public Unit(string id)
+				{
+					Id = id;
+				}
+			}
+
+		
+		public override void Initialize()
+        {
+            CombatRoutine.isSOMRotation();
+            CombatRoutine.Name = "Classic Hardcore Hunter";
+            API.WriteLog("Hardcore Hunter");
+            CombatRoutine.isAutoBindReady = true;
+			
+		
+		
+		CombatRoutine.AddMacro(PetAttack, "D1", "None", "None", @"/petattack");
+		CombatRoutine.AddMacro(AutoShot, "D1", "None", "None", @"/cast !Auto Shot");
+		
+		// AddSpell(RaptorStrike, 2973); //r1
+		// AddSpell(RaptorStrike, 14260); //r2
+		// AddSpell(RaptorStrike, 14261); //r3
+		// AddSpell(RaptorStrike, 14262); //r4
+		// AddSpell(RaptorStrike, 14263); //r5
+		AddSpell(RaptorStrike, 14264); //r6
+		
+		// AddSpell(SerpentSting, 1978); //r1
+		// AddSpell(SerpentSting, 13549); //r2
+		// AddSpell(SerpentSting, 13550); //r3
+		// AddSpell(SerpentSting, 13551); //r4
+		AddSpell(SerpentSting, 13552); //r5
+		
+		// AddSpell(AutoShot, 25368);
+		
+		// AddSpell(ArcaneShot, 3044); //r1
+		// AddSpell(ArcaneShot, 14281); //r2
+		// AddSpell(ArcaneShot, 14282); //r3
+		AddSpell(ArcaneShot, 14283); //r4
+		AddSpell(ArcaneShot, 14284);
+		
+		// AddSpell(ScareBeast, 1513); //r1
+		AddSpell(ScareBeast, 14326); 
+		
+		AddSpell(DismissPet, 2641);
+		
+		AddSpell(WingClip, 2974);
+		AddSpell(ConcussiveShot, 5116);
+		// AddSpell(HuntersMark, 1130); //r1
+		// AddSpell(HuntersMark, 14323); //r2
+		AddSpell(HuntersMark, 14324); //r3
+		
+		AddSpell(FreezingTrap, 1499);
+		AddDebuff(FreezingTrap, 3355);
+		
+		AddSpell(ScorpidSting, 14275);
+		AddDebuff(ScorpidSting, 14275);
+		
+		AddSpell(ViperSting, 3034);
+		AddDebuff(ViperSting, 3034);
+		
+		AddSpell(Shadowmeld, 20580);
+		AddBuff(Shadowmeld, 20580);
+		
+		AddSpell(Intimidation, 19577);
+		
+		AddSpell(Disengage, 781);
+		
+		AddSpell(AspectOfTheHawk, 14320);
+		AddBuff(AspectOfTheHawk, 14320);
+		
+		AddSpell(AspectOfTheCheetah, 5118);
+		AddBuff(AspectOfTheCheetah, 5118);
+		
+		AddSpell(AspectOfTheMonkey, 13163);
+		AddBuff(AspectOfTheMonkey, 13163);
+		
+		AddSpell(BestialWrath, 19574);
+		
+		AddSpell(RapidFire, 3045);
+		
+		// AddSpell(MultiShot, 2643); //r1
+		AddSpell(MultiShot, 14288);
+		
+		AddSpell(PetGrowl, 14918);
+		
+		// AddSpell(MendPet, 136); //r1
+		// AddSpell(MendPet, 3111); //r2
+		// AddSpell(MendPet, 3661); //r3
+		AddSpell(MendPet, 3662);
+		
+		// AddSpell(MongooseBite, 1495); //r1
+		AddSpell(MongooseBite, 14269);
+		
+		AddSpell(RevivePet, 982);
+		// AddBuff(MendPet, 136); //r1
+		AddBuff(MendPet, 3111);
+		
+		AddBuff(FeignDeath, 5384);
+		AddSpell(FeignDeath, 5384);
+		
+		AddDebuff(ScareBeast, 1513); //r1
+		AddDebuff(ScareBeast, 14326); 
+		
+		// AddDebuff(SerpentSting, 1978); //r1
+		// AddDebuff(SerpentSting, 13549); //r2
+		// AddDebuff(SerpentSting, 13550); //r3
+		// AddDebuff(SerpentSting, 13551); //r4
+		AddDebuff(SerpentSting, 13552); //r5
+		
+		// AddDebuff(HuntersMark, 1130); //r1
+		// AddDebuff(HuntersMark, 14323); //r2
+		AddDebuff(HuntersMark, 14324); //r3
+		
+		AddDebuff(ConcussiveShot, 5116);
+		AddDebuff(WingClip, 14267);
+		
+		
+
+			 var toggles = new string[] { HMark, Kite, NoSting, PetAttack };
+
+			foreach (string toggle in toggles)
+			{
+				AddToggle(toggle);
+			}
+			
+		private DateTime startedMovingTime;
+			
+			
+			
+		}
+		public override void CombatPulse()
+		{
+			
+			Unit target = new Unit("target");
+			 if (!API.PlayerIsChanneling && !API.PlayerSpellonCursor && !API.PlayerIsCasting() && !API.TargetHasDebuff(FreezingTrap) && !API.PlayerHasBuff(FeignDeath) && !API.PlayerHasBuff(Shadowmeld))
+				{
+			
+			{ CheckAndCastAspectOfTheCheetah(); }
+			{ DamageRotation(); }
+			
+				}
+			
+			private DateTime startedMovingTime;
+
+			void CheckAndCastAspectOfTheCheetah()
+			{
+				if (API.PlayerIsMoving)
+				{
+					if (startedMovingTime == default(DateTime))
+					{
+						startedMovingTime = DateTime.Now;
+					}
+				}
+				else
+				{
+					startedMovingTime = default(DateTime);
+				}
+
+				TimeSpan timeMoving = DateTime.Now - startedMovingTime;
+				bool shouldSwitchToCheetah = API.PlayerIsMoving && timeMoving.TotalSeconds >= 5;
+
+				if (shouldSwitchToCheetah && !API.PlayerHasBuff(AspectOfTheCheetah))
+				{
+					API.CastSpell(AspectOfTheCheetah);
+				}
+			}
+
+			void DamageRotation() {
+				if (API.ToggleIsEnabled(PetAttack) && API.TargetHasDebuff(HuntersMark) && API.PlayerCanAttackTarget && !API.PetIsIncombat) {
+					API.CastSpell(PetAttack);
+					return;
+				}
+				if (API.ToggleIsEnabled(PetAttack) && API.PlayerCanAttackTarget && API.PetIsIncombat && target.TargetingPlayer && API.CanCast(PetGrowl)) {
+					API.CastSpell(PetGrowl);
+					API.CastSpell(PetAttack);
+					return;
+				}
+				
+				if (API.PlayerHasBuff(AspectOfTheMonkey) && API.PlayerIsInCombat && API.TargetRange >= 8) {
+					API.CastSpell(AspectOfTheHawk);
+					return;
+					}
+			    if (API.PlayerHasBuff(AspectOfTheCheetah) && API.PlayerIsInCombat && API.CanCast(AspectOfTheHawk) && API.PlayerHealthPercent >= 41) {
+					API.CastSpell(AspectOfTheHawk);
+					return;
+				}
+				if (!API.PlayerHasBuff(AspectOfTheMonkey) && API.PlayerIsInCombat && API.CanCast(AspectOfTheMonkey) && API.PlayerHealthPercent <= 30 && API.PlayerMana > 35) {
+					API.CastSpell(AspectOfTheMonkey);
+					return;
+				}
+				if (API.ToggleIsEnabled(HMark) && !API.TargetHasDebuff(HuntersMark) && API.TargetRange <= 100 && API.CanCast(HuntersMark)) {
+					API.CastSpell(HuntersMark);
+					// API.CastSpell(PetAttack);
+					return;
+				}
+				
+				if (API.ToggleIsEnabled(Kite) && API.PlayerIsMoving && !API.TargetHasDebuff(ConcussiveShot) && !API.TargetHasDebuff(WingClip) && API.TargetRange >= 8 && API.TargetRange <= 35 && API.CanCast(ConcussiveShot) && target.TargetingPlayer) {
+					API.CastSpell(ConcussiveShot);
+					// API.CastSpell(PetAttack);
+					return;
+				}
+				if (API.TargetRange <= 5) {
+					// Unit target = new Unit("target");
+					// if (!API.PlayerHasBuff(AspectOfTheMonkey) && API.PlayerIsInCombat && API.CanCast(AspectOfTheMonkey) && target.TargetingPlayer) {
+						// API.CastSpell(AspectOfTheMonkey);
+						// return;
+					// }
+					if (API.ToggleIsEnabled(Kite) && API.PlayerIsMoving && !API.TargetHasDebuff(WingClip) && API.CanCast(WingClip) && target.TargetingPlayer) {
+						API.CastSpell(WingClip);
+						// API.CastSpell(PetAttack);
+						return;
+					}
+					if (API.CanCast(Disengage) && API.ToggleIsEnabled(Kite) && target.TargetingPlayer && API.PlayerHasPet && API.PlayerMana > 50) {
+						API.CastSpell(Disengage);
+						// API.CastSpell(PetAttack);
+						return;
+					}
+					if (API.CanCast(MongooseBite)) {
+						API.CastSpell(MongooseBite);
+						return;
+					}
+					if (API.CanCast(RaptorStrike) && (API.PlayerLastSpell != RaptorStrike || API.LastSpellCastInGame != RaptorStrike) ) {
+						API.CastSpell(RaptorStrike);
+						// API.CastSpell(PetAttack);
+						return;
+					}
+				}
+				if (IsAOE && API.TargetUnitInRangeCount >= 2 && API.CanCast(MultiShot) && API.TargetRange >= 8 && API.TargetRange <= 35 && API.PlayerMana > 60) {
+					API.CastSpell(MultiShot);
+					return;
+				}
+				// if (!API.TargetHasDebuff(ViperSting) && !API.TargetHasDebuff(ScorpidSting) && !API.TargetHasDebuff(SerpentSting) && API.TargetRange >= 8 && API.TargetRange <= 35 && API.CanCast(ViperSting) && API.TargetHealthPercent > 50 && API.PlayerIsInCombat && API.TargetManaPercent > 10 && API.PlayerMana < 95) {
+					// API.CastSpell(ViperSting);
+					// API.CastSpell(PetAttack);
+					// return;
+				// }
+				if (!API.TargetHasDebuff(ViperSting) && !API.TargetHasDebuff(SerpentSting) && !API.TargetHasDebuff(ScorpidSting) && !API.ToggleIsEnabled(NoSting) && API.TargetRange >= 8 && API.TargetRange <= 35 && API.CanCast(SerpentSting) && API.TargetHealthPercent > 20 && API.PlayerIsInCombat) {
+					API.CastSpell(SerpentSting);
+					// API.CastSpell(PetAttack);
+					return;
+				}
+				if (API.TargetRange >= 8 && API.TargetRange <= 35 && API.CanCast(ArcaneShot) && (IsCooldowns || API.PlayerMana > 75)) {
+					API.CastSpell(ArcaneShot);
+					// API.CastSpell(PetAttack);
+					return;
+				}
+				if (API.TargetRange >= 8 && API.TargetRange <= 35 && !API.Classic_PlayerIsAutoAttackRange) {
+					API.CastSpell(AutoShot);
+					// API.CastSpell(PetAttack);
+					return;
+				}
+			}
+		}
+	
+		
+		public override void OutOfCombatPulse()
+				
+				
+				{
+				if (!API.PlayerHasPet && API.PlayerMana > 75 && !API.PlayerIsCasting() && API.CanCast(RevivePet)) {
+				API.CastSpell(RevivePet);
+				return;
+				}
+				
+				if (API.PlayerIsMoving)
+				{
+					if (startedMovingTime == default(DateTime))
+					{
+						startedMovingTime = DateTime.Now;
+					}
+				}
+				else
+				{
+					startedMovingTime = default(DateTime);
+				}
+
+				TimeSpan timeMoving = DateTime.Now - startedMovingTime;
+				bool shouldSwitchToCheetah = API.PlayerIsMoving && timeMoving.TotalSeconds >= 5;
+
+				if (shouldSwitchToCheetah && !API.PlayerHasBuff(AspectOfTheCheetah))
+				{
+					API.CastSpell(AspectOfTheCheetah);
+					return;
+				}
+				// if (API.PlayerIsMoving && API.CanCast(AspectOfTheCheetah) && !API.PlayerHasBuff(AspectOfTheCheetah)) {
+					// API.CastSpell(AspectOfTheCheetah);
+					// return;
+				// }
+				// if (!API.PlayerIsMoving && API.CanCast(AspectOfTheHawk) && !API.PlayerHasBuff(AspectOfTheHawk)) {
+					// API.CastSpell(AspectOfTheHawk);
+					// return;
+				// }
+			}
+	
+
+		public override void Pulse()
+        {
+		}
+		}
+		}
+		
+		
+	
